@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -247,7 +248,6 @@ h1 span {
     transition: width 0.8s linear;
 }
 
-/* LINEE DIAGONALI BIANCHE E NERE */
 .scoreline-stripes {
     position: absolute;
     inset: 0;
@@ -475,6 +475,10 @@ footer {
         font-size: 9px;
         letter-spacing: .5px;
     }
+
+    #rana-walk {
+        width: 72px;
+    }
 }
 
 /* DISPLAY MOLTO BASSI */
@@ -542,17 +546,19 @@ footer {
     }
 }
 
-/* RANA WALK */
+/* RANA WEBP */
 #rana-walk {
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 120px;
+    width: 90px;
     height: auto;
     z-index: 9999;
     pointer-events: none;
     display: none;
     user-select: none;
+    object-fit: contain;
+    will-change: left, opacity;
 }
 </style>
 </head>
@@ -561,7 +567,7 @@ footer {
 <div class="page">
     <header>
         <div class="brand">
-            <img class="logo" src="logo.svg" alt="23 Productions">
+            <img class="logo" src="/logo.svg" alt="23 Productions">
             <div>
                 <div class="brand-text">23 PRODUCTIONS</div>
                 <div class="brand-sub">INDEPENDENT FILMMAKING</div>
@@ -608,7 +614,6 @@ footer {
             </div>
         </section>
 
-        <!-- SCORELINE -->
         <section class="scoreline">
             <div class="scoreline-info">
                 <span>PRODUCTION PROGRESS</span>
@@ -642,23 +647,10 @@ footer {
     </footer>
 </div>
 
-<img id="rana-walk" src="" alt="" aria-hidden="true">
+<img id="rana-walk" src="/rana_walk.webp" alt="" aria-hidden="true">
 
 <script>
 const deadline = new Date("2026-11-29T19:00:00+01:00");
-
-/*
-=========================================================
-MODIFICA QUI LA DATA E L'ORA DI INIZIO DELLA SCORELINE
-
-Formato: AAAA-MM-GGTHH:MM:SS+01:00
-
-Esempio:
-const scorelineStart = new Date("2025-11-01T12:00:00+01:00");
-
-La percentuale avanza da questa data fino alla consegna.
-=========================================================
-*/
 const scorelineStart = new Date("2026-11-27T19:00:00+01:00");
 
 const $ = id => document.getElementById(id);
@@ -675,29 +667,25 @@ function updateClock() {
     }).format(new Date());
 }
 
-/* SCORELINE PERCENTUALE */
+/* SCORELINE */
 function updateScoreline() {
     const now = Date.now();
     const start = scorelineStart.getTime();
     const end = deadline.getTime();
-
     const total = end - start;
     const elapsed = now - start;
 
     let percentage = 0;
 
     if (total > 0) {
-        percentage = Math.max(
-            0,
-            Math.min(100, (elapsed / total) * 100)
-        );
+        percentage = Math.max(0, Math.min(100, elapsed / total * 100));
     }
 
     $("scoreFill").style.width = percentage + "%";
     $("scorePercent").textContent = percentage.toFixed(1) + "%";
 }
 
-/* COUNTDOWN CON ORE TOTALI */
+/* COUNTDOWN */
 function updateCountdown() {
     const now = Date.now();
     const remaining = Math.max(0, deadline.getTime() - now);
@@ -745,215 +733,154 @@ updateCountdown();
 setInterval(updateClock, 1000);
 setInterval(updateCountdown, 1000);
 
-/* RANA WALK: 42 FRAME A 24 FPS, MOVIMENTO VERSO SINISTRA */
+/* RANA WEBP: CAMMINA, SALUTA AL CENTRO E RIPARTE */
 (() => {
-    const frog = document.getElementById("rana-walk");
+    const frog = $("rana-walk");
     if (!frog) return;
 
-    // CONFIGURAZIONE LEGGERA
-    const WALK_COUNT = 42;
-    const HI_COUNT = 73;
-    const FPS = 12;
-    const FRAME_MS = 1000 / FPS;
+    const WALK_WEBP = "/rana_walk.webp";
+    const HI_WEBP = "/rana_hi.webp";
+
     const SPEED = 100;
-    const SCALE = 0.5;          // Riduce i frame al 50% per lato
-    const DISPLAY_WIDTH = 90;  // Rana visualizzata a 90px
-    const CACHE_LIMIT = 8;      // Massimo 8 frame ridimensionati in cache
+    const START_DELAY = 2000;
+    const PAUSE_AT_EXIT = 2000;
+    const GREETING_DURATION = 3000;
 
-    const walkFrames = Array.from({ length: WALK_COUNT }, (_, i) =>
-        `rana_walk/WALK${String(i + 1).padStart(8, "0")}.png`
-    );
-
-    const hiFrames = Array.from({ length: HI_COUNT }, (_, i) =>
-        `rana_hi/HI${String(i + 1).padStart(8, "0")}.png`
-    );
-
-    frog.style.width = `${DISPLAY_WIDTH}px`;
-    frog.style.height = "auto";
-    frog.style.objectFit = "contain";
-    frog.style.imageRendering = "auto";
-    frog.style.willChange = "left, opacity";
-
-    // Cache limitata: ridimensiona i frame prima di conservarli.
-    const cache = new Map();
-    const pending = new Map();
-
-    function loadSmallFrame(src) {
-        if (cache.has(src)) {
-            const item = cache.get(src);
-            cache.delete(src);
-            cache.set(src, item);
-            return Promise.resolve(item.url);
-        }
-
-        if (pending.has(src)) return pending.get(src);
-
-        const promise = new Promise((resolve, reject) => {
-            const original = new Image();
-            original.decoding = "async";
-
-            original.onload = async () => {
-                try {
-                    if (original.decode) await original.decode();
-
-                    const canvas = document.createElement("canvas");
-                    canvas.width = Math.max(1, Math.round(original.naturalWidth * SCALE));
-                    canvas.height = Math.max(1, Math.round(original.naturalHeight * SCALE));
-
-                    const ctx = canvas.getContext("2d", { alpha: true });
-                    ctx.drawImage(original, 0, 0, canvas.width, canvas.height);
-
-                    canvas.toBlob(blob => {
-                        if (!blob) {
-                            reject(new Error("Ridimensionamento immagine fallito"));
-                            return;
-                        }
-
-                        const url = URL.createObjectURL(blob);
-                        cache.set(src, { url, blob });
-
-                        while (cache.size > CACHE_LIMIT) {
-                            const oldestKey = cache.keys().next().value;
-                            const oldest = cache.get(oldestKey);
-                            URL.revokeObjectURL(oldest.url);
-                            cache.delete(oldestKey);
-                        }
-
-                        resolve(url);
-                    }, "image/webp", 0.78);
-                } catch (error) {
-                    reject(error);
-                }
-            };
-
-            original.onerror = () => reject(new Error(`Immagine non trovata: ${src}`));
-            original.src = src;
-        }).finally(() => pending.delete(src));
-
-        pending.set(src, promise);
-        return promise;
-    }
-
-    let started = false;
+    let x = 0;
+    let lastTime = 0;
     let raf = 0;
     let restartTimeout = 0;
-    let requestId = 0;
+    let greetingTimeout = 0;
+    let greeted = false;
+    let mode = "walk";
+    let running = false;
+    let generation = 0;
 
-    async function showFrame(frames, index) {
-        const id = ++requestId;
-        try {
-            const url = await loadSmallFrame(frames[index]);
-            if (id === requestId) frog.src = url;
-        } catch (error) {
-            console.warn(error.message);
+    const walkPreload = new Image();
+    const hiPreload = new Image();
+
+    walkPreload.src = WALK_WEBP;
+    hiPreload.src = HI_WEBP;
+
+    function setAnimation(src) {
+        if (!frog.src.endsWith(src)) {
+            frog.src = src;
         }
     }
 
-    function startFrog() {
-        if (started) return;
-        started = true;
+    function startWalking(now) {
+        generation++;
+        clearTimeout(greetingTimeout);
 
-        frog.style.display = "block";
-        frog.style.opacity = "1";
-        frog.style.transition = "opacity 140ms ease";
-
-        let x = window.innerWidth;
-        let lastTime = performance.now();
-        let elapsed = 0;
-        let frameIndex = 0;
-        let mode = "walk";
-        let greeted = false;
-        let lastShown = -1;
+        mode = "walk";
+        greeted = false;
+        x = window.innerWidth;
+        lastTime = now;
 
         frog.style.left = `${x}px`;
-        showFrame(walkFrames, 0);
+        frog.style.opacity = "1";
 
-        function changeMode(nextMode, now) {
-            mode = nextMode;
-            frameIndex = 0;
-            elapsed = 0;
-            lastShown = -1;
-            lastTime = now;
+        setAnimation(WALK_WEBP);
+    }
 
-            frog.style.opacity = "0";
-            showFrame(nextMode === "hi" ? hiFrames : walkFrames, 0);
-            requestAnimationFrame(() => {
-                frog.style.opacity = "1";
-            });
-        }
+    function showGreeting(now) {
+        mode = "hi";
+        lastTime = now;
+        setAnimation(HI_WEBP);
 
-        function animate(now) {
-            const delta = Math.min(now - lastTime, 100);
-            lastTime = now;
+        const thisGeneration = generation;
 
-            if (mode === "walk") {
-                x -= SPEED * delta / 1000;
-                frog.style.left = `${x}px`;
-
-                // Saluto una volta al centro dello schermo.
-                const center = x + frog.offsetWidth / 2;
-                if (!greeted && center <= window.innerWidth / 2) {
-                    greeted = true;
-                    changeMode("hi", now);
-                    raf = requestAnimationFrame(animate);
-                    return;
-                }
-
-                elapsed += delta;
-                while (elapsed >= FRAME_MS) {
-                    elapsed -= FRAME_MS;
-                    frameIndex = (frameIndex + 2) % WALK_COUNT;
-                }
-
-                if (frameIndex !== lastShown) {
-                    lastShown = frameIndex;
-                    showFrame(walkFrames, frameIndex);
-                }
-
-                // Uscita a sinistra, pausa 2 secondi, ritorno a destra.
-                if (x < -frog.offsetWidth) {
-                    cancelAnimationFrame(raf);
-
-                    restartTimeout = setTimeout(() => {
-                        x = window.innerWidth;
-                        frog.style.left = `${x}px`;
-                        frameIndex = 0;
-                        elapsed = 0;
-                        greeted = false;
-                        mode = "walk";
-                        lastShown = -1;
-                        lastTime = performance.now();
-                        frog.style.opacity = "1";
-                        showFrame(walkFrames, 0);
-                        raf = requestAnimationFrame(animate);
-                    }, 2000);
-                    return;
-                }
-            } else {
-                elapsed += delta;
-                while (elapsed >= FRAME_MS) {
-                    elapsed -= FRAME_MS;
-                    frameIndex += 2;
-
-                    if (frameIndex >= HI_COUNT) {
-                        changeMode("walk", now);
-                        break;
-                    }
-                }
-
-                if (mode === "hi" && frameIndex !== lastShown) {
-                    lastShown = frameIndex;
-                    showFrame(hiFrames, frameIndex);
-                }
+        greetingTimeout = setTimeout(() => {
+            if (!running || mode !== "hi" || thisGeneration !== generation) {
+                return;
             }
 
+            startWalking(performance.now());
             raf = requestAnimationFrame(animate);
+        }, GREETING_DURATION);
+    }
+
+    function animate(now) {
+        if (!running || document.hidden) return;
+
+        const delta = Math.min(now - lastTime, 100);
+        lastTime = now;
+
+        if (mode === "walk") {
+            x -= SPEED * delta / 1000;
+            frog.style.left = `${x}px`;
+
+            const center = x + frog.offsetWidth / 2;
+
+            if (!greeted && center <= window.innerWidth / 2) {
+                greeted = true;
+                showGreeting(now);
+                return;
+            }
+
+            if (x < -frog.offsetWidth) {
+                running = false;
+                cancelAnimationFrame(raf);
+
+                restartTimeout = setTimeout(() => {
+                    running = true;
+                    startWalking(performance.now());
+                    raf = requestAnimationFrame(animate);
+                }, PAUSE_AT_EXIT);
+
+                return;
+            }
         }
 
         raf = requestAnimationFrame(animate);
     }
 
-    setTimeout(startFrog, 2000);
+    function start() {
+        if (running) return;
+
+        if (!walkPreload.complete || walkPreload.naturalWidth === 0) {
+            walkPreload.onload = start;
+            walkPreload.onerror = () => {
+                console.error("Impossibile caricare " + WALK_WEBP);
+            };
+            return;
+        }
+
+        if (!hiPreload.complete || hiPreload.naturalWidth === 0) {
+            hiPreload.onload = start;
+            hiPreload.onerror = () => {
+                console.error("Impossibile caricare " + HI_WEBP);
+            };
+            return;
+        }
+
+        running = true;
+        frog.style.display = "block";
+        startWalking(performance.now());
+        raf = requestAnimationFrame(animate);
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
+    setTimeout(start, START_DELAY);
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            cancelAnimationFrame(raf);
+        } else if (running) {
+            lastTime = performance.now();
+            raf = requestAnimationFrame(animate);
+        }
+    });
+
+    window.addEventListener("resize", () => {
+        if (mode === "walk" && x > window.innerWidth) {
+            x = window.innerWidth;
+            frog.style.left = `${x}px`;
+        }
+    });
 })();
 </script>
 </body>
