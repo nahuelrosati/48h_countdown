@@ -567,7 +567,7 @@ footer {
 <div class="page">
     <header>
         <div class="brand">
-            <img class="logo" src="/logo.svg" alt="23 Productions">
+            <img class="logo" src="static/logo.svg" alt="23 Productions">
             <div>
                 <div class="brand-text">23 PRODUCTIONS</div>
                 <div class="brand-sub">INDEPENDENT FILMMAKING</div>
@@ -647,9 +647,10 @@ footer {
     </footer>
 </div>
 
-<img id="rana-walk" src="/rana_walk.webp" alt="" aria-hidden="true">
+<img id="rana-walk" src="static/rana_walk.webp" alt="" aria-hidden="true">
 
 <script>
+
 const deadline = new Date("2026-11-29T19:00:00+01:00");
 const scorelineStart = new Date("2026-11-27T19:00:00+01:00");
 
@@ -738,8 +739,8 @@ setInterval(updateCountdown, 1000);
     const frog = $("rana-walk");
     if (!frog) return;
 
-    const WALK_WEBP = "/rana_walk.webp";
-    const HI_WEBP = "/rana_hi.webp";
+    const WALK_SRC = "/static/rana_walk.webp";
+    const HI_SRC = "/static/rana_hi.webp";
 
     const SPEED = 100;
     const START_DELAY = 2000;
