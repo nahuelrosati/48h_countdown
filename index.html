@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>23 PRODUCTIONS — 48H</title>
+
+<style>
+:root {
+    --bg: #ffffff;
+    --black: #080808;
+    --gray: #777777;
+    --line: #e8e8e8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--black);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.page {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 28px 5vw 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+/* HEADER */
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    display: block;
+    fill: #000000;
+    stroke: #000000;
+}
+
+.brand-text {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+.brand-sub {
+    font-size: 9px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
+
+.clock-wrap {
+    text-align: right;
+}
+
+.clock {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 500;
+    letter-spacing: -1.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.clock-label {
+    margin-top: 4px;
+    color: var(--gray);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* MAIN */
+main {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.kicker {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: clamp(36px, 6vw, 78px);
+    line-height: .95;
+    font-weight: 900;
+    letter-spacing: -4px;
+    text-transform: uppercase;
+}
+
+h1 span {
+    display: block;
+}
+
+.subtitle {
+    color: var(--gray);
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-top: 20px;
+}
+
+.deadline {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--line);
+    padding: 11px 17px;
+    margin-top: 24px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.delivery-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff3030;
+    margin-right: 8px;
+    vertical-align: middle;
+    animation: redPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes redPulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 4px rgba(255, 48, 48, 0.5),
+                    0 0 9px rgba(255, 48, 48, 0.25);
+    }
+    50% {
+        opacity: 0.35;
+        box-shadow: 0 0 8px rgba(255, 48, 48, 0.9),
+                    0 0 16px rgba(255, 48, 48, 0.55);
+    }
+}
+
+/* COUNTDOWN */
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 900px;
+    margin: 42px auto 0;
+    border-top: 1px solid var(--black);
+    border-bottom: 1px solid var(--black);
+}
+
+.unit {
+    padding: 25px 8px 23px;
+    min-width: 0;
+}
+
+.unit + .unit {
+    border-left: 1px solid var(--line);
+}
+
+.number {
+    display: block;
+    font-size: clamp(40px, 7vw, 88px);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.label {
+    display: block;
+    margin-top: 15px;
+    font-size: 9px;
+    color: var(--gray);
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* SCORELINE */
+.scoreline {
+    width: 100%;
+    max-width: 900px;
+    margin: 22px auto 0;
+}
+
+.scoreline-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 9px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+#scorePercent {
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+}
+
+.scoreline-track {
+    width: 100%;
+    height: 12px;
+    background: #ffffff;
+    border: 1px solid #080808;
+    overflow: hidden;
+    position: relative;
+}
+
+.scoreline-fill {
+    position: relative;
+    width: 0%;
+    height: 100%;
+    background: #080808;
+    overflow: hidden;
+    transition: width 0.8s linear;
+}
+
+/* LINEE DIAGONALI BIANCHE E NERE */
+.scoreline-stripes {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        -45deg,
+        #080808 0px,
+        #080808 5px,
+        #ffffff 5px,
+        #ffffff 10px
+    );
+}
+
+/* FOOTER */
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    border-top: 1px solid var(--line);
+    padding-top: 15px;
+}
+
+.footer-text {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gray);
+}
+
+.fullscreen {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid var(--black);
+    background: var(--black);
+    color: white;
+    padding: 12px 17px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.fullscreen:hover {
+    background: white;
+    color: black;
+}
+
+.fullscreen svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* SCHERMI 16:9 */
+@media (min-aspect-ratio: 16/9) and (min-width: 800px) {
+    .page {
+        max-height: 100vh;
+        overflow: hidden;
+    }
+}
+
+/* SCHERMI BASSI */
+@media (max-height: 750px) and (min-width: 601px) {
+    .page {
+        padding-top: 16px;
+        padding-bottom: 14px;
+        gap: 8px;
+    }
+
+    .logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    main {
+        padding: 10px 0;
+    }
+
+    .kicker {
+        margin-bottom: 12px;
+    }
+
+    h1 {
+        font-size: clamp(38px, 5.2vw, 62px);
+    }
+
+    .subtitle {
+        margin-top: 12px;
+    }
+
+    .deadline {
+        margin-top: 16px;
+        padding: 8px 13px;
+    }
+
+    .countdown {
+        margin-top: 25px;
+    }
+
+    .unit {
+        padding: 18px 6px;
+    }
+
+    .number {
+        font-size: clamp(38px, 5.8vw, 65px);
+    }
+
+    .label {
+        margin-top: 9px;
+    }
+
+    .scoreline {
+        margin-top: 15px;
+    }
+
+    .scoreline-track {
+        height: 9px;
+    }
+
+    footer {
+        padding-top: 10px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .page {
+        padding: 20px 17px;
+        gap: 15px;
+    }
+
+    .logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .brand {
+        gap: 9px;
+    }
+
+    .brand-text {
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+
+    .brand-sub {
+        font-size: 7px;
+        letter-spacing: 1px;
+    }
+
+    .clock {
+        font-size: 22px;
+    }
+
+    .clock-label {
+        font-size: 8px;
+    }
+
+    h1 {
+        font-size: clamp(35px, 10vw, 55px);
+        letter-spacing: -2px;
+    }
+
+    .kicker {
+        letter-spacing: 3px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    .deadline {
+        font-size: 9px;
+        letter-spacing: 1px;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .countdown {
+        margin-top: 30px;
+    }
+
+    .unit {
+        padding: 20px 2px;
+    }
+
+    .number {
+        font-size: clamp(28px, 8vw, 44px);
+        letter-spacing: -2px;
+    }
+
+    .label {
+        font-size: 8px;
+        letter-spacing: .5px;
+    }
+
+    .scoreline {
+        margin-top: 18px;
+    }
+
+    .scoreline-info {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+    #scorePercent {
+        font-size: 11px;
+    }
+
+    .scoreline-track {
+        height: 9px;
+    }
+
+    .footer-text {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+    .fullscreen {
+        padding: 11px;
+        font-size: 9px;
+        letter-spacing: .5px;
+    }
+}
+
+/* DISPLAY MOLTO BASSI */
+@media (max-height: 500px) and (min-width: 601px) {
+    .page {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    .brand-sub {
+        display: none;
+    }
+
+    .kicker {
+        margin-bottom: 7px;
+    }
+
+    h1 {
+        font-size: 38px;
+    }
+
+    .subtitle {
+        margin-top: 7px;
+    }
+
+    .deadline {
+        margin-top: 9px;
+    }
+
+    .countdown {
+        margin-top: 15px;
+    }
+
+    .unit {
+        padding: 12px;
+    }
+
+    .number {
+        font-size: 38px;
+    }
+
+    .label {
+        margin-top: 7px;
+    }
+
+    .scoreline {
+        margin-top: 10px;
+    }
+
+    .scoreline-info {
+        margin-bottom: 5px;
+    }
+
+    .scoreline-track {
+        height: 7px;
+    }
+
+    footer {
+        padding-top: 7px;
+    }
+}
+
+/* RANA WALK */
+#rana-walk {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 120px;
+    height: auto;
+    z-index: 9999;
+    pointer-events: none;
+    display: none;
+    user-select: none;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+    <header>
+        <div class="brand">
+            <img class="logo" src="logo.svg" alt="23 Productions">
+            <div>
+                <div class="brand-text">23 PRODUCTIONS</div>
+                <div class="brand-sub">INDEPENDENT FILMMAKING</div>
+            </div>
+        </div>
+
+        <div class="clock-wrap">
+            <div class="clock" id="clock">00:00:00</div>
+            <div class="clock-label">Ora italiana</div>
+        </div>
+    </header>
+
+    <main>
+        <div class="kicker">48 HOUR FILM PROJECT</div>
+
+        <h1>
+            <span>48 ore.</span>
+            <span>Una storia.</span>
+        </h1>
+
+        <p class="subtitle">
+            Il tempo per creare qualcosa di indimenticabile.
+        </p>
+
+        <div class="deadline">
+            <span class="delivery-dot"></span>
+            CONSEGNA — 29 NOVEMBRE 2026 — 19:00
+        </div>
+
+        <section class="countdown">
+            <div class="unit">
+                <span class="number" id="hours">00</span>
+                <span class="label">Ore</span>
+            </div>
+
+            <div class="unit">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Minuti</span>
+            </div>
+
+            <div class="unit">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Secondi</span>
+            </div>
+        </section>
+
+        <!-- SCORELINE -->
+        <section class="scoreline">
+            <div class="scoreline-info">
+                <span>PRODUCTION PROGRESS</span>
+                <span id="scorePercent">00.0%</span>
+            </div>
+
+            <div class="scoreline-track">
+                <div class="scoreline-fill" id="scoreFill">
+                    <div class="scoreline-stripes"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-text" id="footerText">
+            WRITE. SHOOT. EDIT. SUBMIT.
+        </div>
+
+        <button class="fullscreen" id="fullscreenBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+                <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+                <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
+                <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <span id="fullscreenLabel">FULLSCREEN</span>
+        </button>
+    </footer>
+</div>
+
+<img id="rana-walk" src="" alt="" aria-hidden="true">
+
+<script>
+const deadline = new Date("2026-11-29T19:00:00+01:00");
+
+/*
+=========================================================
+MODIFICA QUI LA DATA E L'ORA DI INIZIO DELLA SCORELINE
+
+Formato: AAAA-MM-GGTHH:MM:SS+01:00
+
+Esempio:
+const scorelineStart = new Date("2025-11-01T12:00:00+01:00");
+
+La percentuale avanza da questa data fino alla consegna.
+=========================================================
+*/
+const scorelineStart = new Date("2026-11-27T19:00:00+01:00");
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+
+/* OROLOGIO ITALIANO */
+function updateClock() {
+    $("clock").textContent = new Intl.DateTimeFormat("it-IT", {
+        timeZone: "Europe/Rome",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23"
+    }).format(new Date());
+}
+
+/* SCORELINE PERCENTUALE */
+function updateScoreline() {
+    const now = Date.now();
+    const start = scorelineStart.getTime();
+    const end = deadline.getTime();
+
+    const total = end - start;
+    const elapsed = now - start;
+
+    let percentage = 0;
+
+    if (total > 0) {
+        percentage = Math.max(
+            0,
+            Math.min(100, (elapsed / total) * 100)
+        );
+    }
+
+    $("scoreFill").style.width = percentage + "%";
+    $("scorePercent").textContent = percentage.toFixed(1) + "%";
+}
+
+/* COUNTDOWN CON ORE TOTALI */
+function updateCountdown() {
+    const now = Date.now();
+    const remaining = Math.max(0, deadline.getTime() - now);
+
+    const hours = Math.floor(remaining / 3600000);
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+
+    $("hours").textContent = String(hours).padStart(2, "0");
+    $("minutes").textContent = pad(minutes);
+    $("seconds").textContent = pad(seconds);
+
+    updateScoreline();
+
+    if (now >= deadline.getTime()) {
+        $("footerText").textContent = "DEADLINE REACHED.";
+    }
+}
+
+/* FULLSCREEN */
+async function toggleFullscreen() {
+    try {
+        if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+        } else {
+            await document.exitFullscreen();
+        }
+    } catch {
+        $("footerText").textContent =
+            "FULLSCREEN NON DISPONIBILE IN QUESTO BROWSER.";
+    }
+}
+
+$("fullscreenBtn").addEventListener("click", toggleFullscreen);
+
+document.addEventListener("fullscreenchange", () => {
+    $("fullscreenLabel").textContent =
+        document.fullscreenElement ? "ESCI" : "FULLSCREEN";
+});
+
+/* AVVIO */
+updateClock();
+updateCountdown();
+
+setInterval(updateClock, 1000);
+setInterval(updateCountdown, 1000);
+
+/* RANA WALK: 42 FRAME A 24 FPS, MOVIMENTO VERSO SINISTRA */
+(() => {
+    const frog = document.getElementById("rana-walk");
+
+    const WALK_COUNT = 42;
+    const HI_COUNT = 73;
+    const FPS = 24;
+    const FRAME_MS = 1000 / FPS;
+    const SPEED = 100;
+    const TRANSITION_MS = 180;
+
+    const walkFrames = Array.from({ length: WALK_COUNT }, (_, i) =>
+        `rana_walk/WALK${String(i + 1).padStart(8, "0")}.png`
+    );
+
+    const hiFrames = Array.from({ length: HI_COUNT }, (_, i) =>
+        `rana_hi/HI${String(i + 1).padStart(8, "0")}.png`
+    );
+
+    // Precarica tutti i frame
+    [...walkFrames, ...hiFrames].forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+
+    let started = false;
+    let animationFrame;
+    let restartTimeout;
+
+    function startFrog() {
+        if (started) return;
+        started = true;
+
+        frog.style.display = "block";
+        frog.style.opacity = "1";
+        frog.style.transition = `opacity ${TRANSITION_MS}ms ease`;
+
+        let x = window.innerWidth;
+        let lastTime = performance.now();
+        let elapsed = 0;
+        let frameIndex = 0;
+        let mode = "walk";
+        let greeted = false;
+        let transition = null;
+
+        frog.style.left = `${x}px`;
+        frog.src = walkFrames[0];
+
+        function switchAnimation(nextMode, now) {
+            mode = nextMode;
+            frameIndex = 0;
+            elapsed = 0;
+            lastTime = now;
+
+            // Dissolvenza breve durante il cambio di animazione
+            frog.style.opacity = "0";
+
+            transition = {
+                start: now,
+                mode: nextMode
+            };
+
+            frog.src = nextMode === "hi" ? hiFrames[0] : walkFrames[0];
+        }
+
+        function animate(now) {
+            const delta = Math.min(now - lastTime, 100);
+            lastTime = now;
+
+            if (transition) {
+                const progress = Math.min(
+                    (now - transition.start) / TRANSITION_MS,
+                    1
+                );
+
+                frog.style.opacity = String(progress);
+
+                if (progress >= 1) {
+                    transition = null;
+                }
+            }
+
+            if (mode === "walk") {
+                x -= SPEED * delta / 1000;
+                frog.style.left = `${x}px`;
+
+                // Fermati al centro per fare il saluto
+                const center = x + frog.offsetWidth / 2;
+
+                if (!greeted && center <= window.innerWidth / 2) {
+                    greeted = true;
+                    switchAnimation("hi", now);
+                    animationFrame = requestAnimationFrame(animate);
+                    return;
+                }
+
+                elapsed += delta;
+
+                while (elapsed >= FRAME_MS) {
+                    elapsed -= FRAME_MS;
+                    frameIndex = (frameIndex + 1) % WALK_COUNT;
+                    frog.src = walkFrames[frameIndex];
+                }
+
+                // Uscita a sinistra: attesa di 2 secondi e ripartenza
+                if (x < -frog.offsetWidth) {
+                    cancelAnimationFrame(animationFrame);
+
+                    restartTimeout = setTimeout(() => {
+                        x = window.innerWidth;
+                        frog.style.left = `${x}px`;
+                        frameIndex = 0;
+                        elapsed = 0;
+                        greeted = false;
+                        mode = "walk";
+                        transition = null;
+                        frog.style.opacity = "1";
+                        frog.src = walkFrames[0];
+                        lastTime = performance.now();
+
+                        animationFrame = requestAnimationFrame(animate);
+                    }, 2000);
+
+                    return;
+                }
+            } else if (mode === "hi") {
+                // Riproduci il saluto una volta sola a 24 FPS
+                elapsed += delta;
+
+                while (elapsed >= FRAME_MS) {
+                    elapsed -= FRAME_MS;
+                    frameIndex++;
+
+                    if (frameIndex >= HI_COUNT) {
+                        switchAnimation("walk", now);
+                        break;
+                    }
+
+                    frog.src = hiFrames[frameIndex];
+                }
+            }
+
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        animationFrame = requestAnimationFrame(animate);
+    }
+
+    // Prima comparsa dopo 2 secondi
+    setTimeout(startFrog, 2000);
+})();
+</script>
+</body>
+</html>
