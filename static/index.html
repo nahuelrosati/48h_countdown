@@ -547,19 +547,16 @@ footer {
 }
 
 /* RANA WEBP */
-#rana-walk {
+  #rana-walk {
     position: fixed;
+    bottom: 18px;
     left: 0;
-    bottom: 0;
     width: 90px;
     height: auto;
     z-index: 9999;
     pointer-events: none;
     display: none;
-    user-select: none;
-    object-fit: contain;
-    will-change: left, opacity;
-}
+  }
 </style>
 </head>
 
@@ -736,152 +733,94 @@ setInterval(updateCountdown, 1000);
 
 /* RANA WEBP: CAMMINA, SALUTA AL CENTRO E RIPARTE */
 (() => {
-    const frog = $("rana-walk");
-    if (!frog) return;
+  const frog = document.getElementById("rana-walk");
+  const WALK_SRC = "/static/rana_walk.webp";
+  const HI_SRC = "/static/rana_hi.webp";
 
-    const WALK_SRC = "/static/rana_walk.webp";
-    const HI_SRC = "/static/rana_hi.webp";
+  const SPEED = 140; // pixel al secondo
+  const GREETING_DURATION = 3000;
+  const PAUSE_AT_EXIT = 1500;
+  const START_DELAY = 1500;
 
-    const SPEED = 100;
-    const START_DELAY = 2000;
-    const PAUSE_AT_EXIT = 2000;
-    const GREETING_DURATION = 3000;
+  let x = window.innerWidth;
+  let lastTime = 0;
+  let greeting = false;
+  let greetingTimer = null;
+  let animationFrame = null;
+  let running = false;
 
-    let x = 0;
-    let lastTime = 0;
-    let raf = 0;
-    let restartTimeout = 0;
-    let greetingTimeout = 0;
-    let greeted = false;
-    let mode = "walk";
-    let running = false;
-    let generation = 0;
+  const walkImage = new Image();
+  const hiImage = new Image();
 
-    const walkPreload = new Image();
-    const hiPreload = new Image();
+  walkImage.src = WALK_SRC;
+  hiImage.src = HI_SRC;
 
-    walkPreload.src = WALK_WEBP;
-    hiPreload.src = HI_WEBP;
+  function startWalking() {
+    clearTimeout(greetingTimer);
+    cancelAnimationFrame(animationFrame);
 
-    function setAnimation(src) {
-        if (!frog.src.endsWith(src)) {
-            frog.src = src;
-        }
+    greeting = false;
+    running = true;
+    x = window.innerWidth;
+    lastTime = 0;
+
+    frog.src = WALK_SRC;
+    frog.style.display = "block";
+    frog.style.left = `${x}px`;
+
+    animationFrame = requestAnimationFrame(move);
+  }
+
+  function showGreeting() {
+    greeting = true;
+    frog.src = HI_SRC;
+    frog.style.left = `${(window.innerWidth - frog.offsetWidth) / 2}px`;
+
+    greetingTimer = setTimeout(() => {
+      x = -frog.offsetWidth;
+      frog.src = WALK_SRC;
+      greeting = false;
+      lastTime = 0;
+      animationFrame = requestAnimationFrame(move);
+    }, GREETING_DURATION);
+  }
+
+  function move(time) {
+    if (!running || greeting) return;
+
+    if (!lastTime) lastTime = time;
+    const delta = Math.min((time - lastTime) / 1000, 0.05);
+    lastTime = time;
+
+    x -= SPEED * delta;
+    frog.style.left = `${x}px`;
+
+    if (x <= (window.innerWidth - frog.offsetWidth) / 2) {
+      showGreeting();
+      return;
     }
 
-    function startWalking(now) {
-        generation++;
-        clearTimeout(greetingTimeout);
-
-        mode = "walk";
-        greeted = false;
-        x = window.innerWidth;
-        lastTime = now;
-
-        frog.style.left = `${x}px`;
-        frog.style.opacity = "1";
-
-        setAnimation(WALK_WEBP);
+    if (x < -frog.offsetWidth) {
+      frog.style.display = "none";
+      setTimeout(startWalking, PAUSE_AT_EXIT);
+      return;
     }
 
-    function showGreeting(now) {
-        mode = "hi";
-        lastTime = now;
-        setAnimation(HI_WEBP);
+    animationFrame = requestAnimationFrame(move);
+  }
 
-        const thisGeneration = generation;
-
-        greetingTimeout = setTimeout(() => {
-            if (!running || mode !== "hi" || thisGeneration !== generation) {
-                return;
-            }
-
-            startWalking(performance.now());
-            raf = requestAnimationFrame(animate);
-        }, GREETING_DURATION);
+  window.addEventListener("resize", () => {
+    if (!greeting && running) {
+      x = Math.min(x, window.innerWidth);
+      frog.style.left = `${x}px`;
     }
+  });
 
-    function animate(now) {
-        if (!running || document.hidden) return;
+  walkImage.onload = () => console.log("WebP camminata caricato");
+  walkImage.onerror = () => console.error("Errore caricamento:", WALK_SRC);
+  hiImage.onerror = () => console.error("Errore caricamento:", HI_SRC);
 
-        const delta = Math.min(now - lastTime, 100);
-        lastTime = now;
-
-        if (mode === "walk") {
-            x -= SPEED * delta / 1000;
-            frog.style.left = `${x}px`;
-
-            const center = x + frog.offsetWidth / 2;
-
-            if (!greeted && center <= window.innerWidth / 2) {
-                greeted = true;
-                showGreeting(now);
-                return;
-            }
-
-            if (x < -frog.offsetWidth) {
-                running = false;
-                cancelAnimationFrame(raf);
-
-                restartTimeout = setTimeout(() => {
-                    running = true;
-                    startWalking(performance.now());
-                    raf = requestAnimationFrame(animate);
-                }, PAUSE_AT_EXIT);
-
-                return;
-            }
-        }
-
-        raf = requestAnimationFrame(animate);
-    }
-
-    function start() {
-        if (running) return;
-
-        if (!walkPreload.complete || walkPreload.naturalWidth === 0) {
-            walkPreload.onload = start;
-            walkPreload.onerror = () => {
-                console.error("Impossibile caricare " + WALK_WEBP);
-            };
-            return;
-        }
-
-        if (!hiPreload.complete || hiPreload.naturalWidth === 0) {
-            hiPreload.onload = start;
-            hiPreload.onerror = () => {
-                console.error("Impossibile caricare " + HI_WEBP);
-            };
-            return;
-        }
-
-        running = true;
-        frog.style.display = "block";
-        startWalking(performance.now());
-        raf = requestAnimationFrame(animate);
-    }
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        return;
-    }
-
-    setTimeout(start, START_DELAY);
-
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            cancelAnimationFrame(raf);
-        } else if (running) {
-            lastTime = performance.now();
-            raf = requestAnimationFrame(animate);
-        }
-    });
-
-    window.addEventListener("resize", () => {
-        if (mode === "walk" && x > window.innerWidth) {
-            x = window.innerWidth;
-            frog.style.left = `${x}px`;
-        }
-    });
+  setTimeout(startWalking, START_DELAY);
 })();
 </script>
 </body>
