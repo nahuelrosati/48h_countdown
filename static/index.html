@@ -284,8 +284,8 @@ footer {
     align-items: center;
     gap: 9px;
     border: 1px solid var(--black);
-    background: var(--black);
-    color: white;
+    background: var(--white);
+    color: var(--black);
     padding: 12px 17px;
     font-size: 10px;
     font-weight: 700;
@@ -730,120 +730,172 @@ updateCountdown();
 
 setInterval(updateClock, 1000);
 setInterval(updateCountdown, 1000);
-
+  
 /* RANA WEBP: CAMMINA, SALUTA AL CENTRO E RIPARTE */
-(() => {
-  const frog = document.getElementById("rana-walk");
+ (() => {
+      const frog = document.getElementById("rana-walk");
 
-  const WALK_SRC = "/static/rana_walk.webp";
-  const HI_SRC = "/static/rana_hi.webp";
+      const WALK_SRC = "/static/rana_walk.webp";
+      const HI_SRC = "/static/rana_hi.webp";
 
-  const SPEED = 140;
-  const GREETING_DURATION = 3000;
-  const PAUSE_AT_EXIT = 1500;
-  const START_DELAY = 1500;
+      const SPEED = 140;              // pixel al secondo
+      const GREETING_DURATION = 2500; // durata del saluto
+      const EXIT_PAUSE = 1200;        // pausa prima del rientro
+      const START_DELAY = 1200;
 
-  let x = 0;
-  let lastTime = 0;
-  let animationFrame = null;
-  let timer = null;
-  let state = "waiting";
+      let x = 0;
+      let lastTime = 0;
+      let state = "waiting";
+      let frame = null;
+      let timer = null;
+      let cycle = 0;
 
-  const walkImage = new Image();
-  walkImage.src = WALK_SRC;
+      const walkPreload = new Image();
+      walkPreload.src = WALK_SRC;
 
-  const hiImage = new Image();
-  hiImage.src = HI_SRC;
+      const hiPreload = new Image();
+      hiPreload.src = HI_SRC;
 
-  function scheduleNextWalk(delay) {
-    clearTimeout(timer);
-    timer = setTimeout(startWalking, delay);
-  }
+      function cancelMotion() {
+        if (frame !== null) {
+          cancelAnimationFrame(frame);
+          frame = null;
+        }
+      }
 
-  function startWalking() {
-    cancelAnimationFrame(animationFrame);
-    clearTimeout(timer);
+      function clearTimer() {
+        if (timer !== null) {
+          clearTimeout(timer);
+          timer = null;
+        }
+      }
 
-    state = "walking";
-    x = window.innerWidth;
-    lastTime = 0;
+      function scheduleEntry(delay) {
+        clearTimer();
+        state = "waiting";
 
-    frog.src = WALK_SRC;
-    frog.style.display = "block";
-    frog.style.left = `${x}px`;
+        timer = setTimeout(() => {
+          timer = null;
+          startEntry();
+        }, delay);
+      }
 
-    animationFrame = requestAnimationFrame(move);
-  }
+      function startEntry() {
+        cancelMotion();
+        clearTimer();
 
-  function move(time) {
-    if (state !== "walking") return;
+        cycle++;
+        state = "walking-in";
+        x = window.innerWidth;
+        lastTime = 0;
 
-    if (lastTime === 0) lastTime = time;
-    const delta = Math.min((time - lastTime) / 1000, 0.05);
-    lastTime = time;
+        frog.src = WALK_SRC;
+        frog.style.display = "block";
+        frog.style.left = `${x}px`;
 
-    x -= SPEED * delta;
-    frog.style.left = `${x}px`;
+        frame = requestAnimationFrame(tick);
+      }
 
-    const centerX = (window.innerWidth - frog.offsetWidth) / 2;
+      function tick(timestamp) {
+        frame = null;
 
-    if (x <= centerX) {
-      greet();
-      return;
-    }
+        if (state !== "walking-in" && state !== "walking-out") {
+          return;
+        }
 
-    if (x <= -frog.offsetWidth) {
-      state = "waiting";
-      frog.style.display = "none";
-      scheduleNextWalk(PAUSE_AT_EXIT);
-      return;
-    }
+        if (lastTime === 0) {
+          lastTime = timestamp;
+        }
 
-    animationFrame = requestAnimationFrame(move);
-  }
+        const delta = Math.min((timestamp - lastTime) / 1000, 0.05);
+        lastTime = timestamp;
 
-  function greet() {
-    state = "greeting";
-    cancelAnimationFrame(animationFrame);
+        // In entrata e in uscita la rana cammina sempre verso sinistra.
+        x -= SPEED * delta;
+        frog.style.left = `${x}px`;
 
-    frog.src = HI_SRC;
-    frog.style.left =
-      `${(window.innerWidth - frog.offsetWidth) / 2}px`;
+        if (state === "walking-in") {
+          const centerX = (window.innerWidth - frog.offsetWidth) / 2;
 
-    timer = setTimeout(() => {
-      state = "walking";
-      x = -frog.offsetWidth;
-      lastTime = 0;
+          if (x <= centerX) {
+            x = centerX;
+            frog.style.left = `${x}px`;
+            startGreeting();
+            return;
+          }
+        }
 
-      frog.src = WALK_SRC;
-      frog.style.left = `${x}px`;
+        // Importante: dopo il saluto continua da dove si era fermata,
+        // senza riportare x fuori dallo schermo prima del movimento.
+        if (state === "walking-out" && x + frog.offsetWidth <= 0) {
+          frog.style.display = "none";
+          scheduleEntry(EXIT_PAUSE);
+          return;
+        }
 
-      animationFrame = requestAnimationFrame(move);
-    }, GREETING_DURATION);
-  }
+        frame = requestAnimationFrame(tick);
+      }
 
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      cancelAnimationFrame(animationFrame);
-      clearTimeout(timer);
-      return;
-    }
+      function startGreeting() {
+        cancelMotion();
+        clearTimer();
 
-    if (state === "walking") {
-      lastTime = 0;
-      animationFrame = requestAnimationFrame(move);
-    } else if (state === "greeting") {
-      greet();
-    } else {
-      scheduleNextWalk(START_DELAY);
-    }
-  });
+        state = "greeting";
+        lastTime = 0;
 
-  walkImage.onerror = () => console.error("Impossibile caricare", WALK_SRC);
-  hiImage.onerror = () => console.error("Impossibile caricare", HI_SRC);
+        frog.src = HI_SRC;
 
-  scheduleNextWalk(START_DELAY);
-})();
+        timer = setTimeout(() => {
+          timer = null;
+
+          // Riprende dal centro e cammina fino al bordo sinistro.
+          state = "walking-out";
+          frog.src = WALK_SRC;
+          lastTime = 0;
+
+          frame = requestAnimationFrame(tick);
+        }, GREETING_DURATION);
+      }
+
+      // Se la finestra viene ridimensionata durante il saluto,
+      // la rana resta centrata.
+      window.addEventListener("resize", () => {
+        if (state === "greeting") {
+          x = (window.innerWidth - frog.offsetWidth) / 2;
+          frog.style.left = `${x}px`;
+        }
+      });
+
+      // Sospende l'animazione quando la scheda è nascosta e la
+      // riavvia senza lasciare timer o frame bloccati.
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          cancelMotion();
+          clearTimer();
+          return;
+        }
+
+        lastTime = 0;
+
+        if (state === "walking-in" || state === "walking-out") {
+          frame = requestAnimationFrame(tick);
+        } else if (state === "greeting") {
+          startGreeting();
+        } else {
+          scheduleEntry(START_DELAY);
+        }
+      });
+
+      walkPreload.onerror = () => {
+        console.error("Impossibile caricare la rana che cammina:", WALK_SRC);
+      };
+
+      hiPreload.onerror = () => {
+        console.error("Impossibile caricare la rana che saluta:", HI_SRC);
+      };
+
+      scheduleEntry(START_DELAY);
+    })();
 </script>
 </body>
 </html>
