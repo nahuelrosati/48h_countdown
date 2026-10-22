@@ -748,13 +748,17 @@ setInterval(updateCountdown, 1000);
 /* RANA WALK: 42 FRAME A 24 FPS, MOVIMENTO VERSO SINISTRA */
 (() => {
     const frog = document.getElementById("rana-walk");
+    if (!frog) return;
 
+    // CONFIGURAZIONE LEGGERA
     const WALK_COUNT = 42;
     const HI_COUNT = 73;
-    const FPS = 24;
+    const FPS = 12;
     const FRAME_MS = 1000 / FPS;
     const SPEED = 100;
-    const TRANSITION_MS = 180;
+    const SCALE = 0.5;          // Riduce i frame al 50% per lato
+    const DISPLAY_WIDTH = 90;  // Rana visualizzata a 90px
+    const CACHE_LIMIT = 8;      // Massimo 8 frame ridimensionati in cache
 
     const walkFrames = Array.from({ length: WALK_COUNT }, (_, i) =>
         `rana_walk/WALK${String(i + 1).padStart(8, "0")}.png`
@@ -764,15 +768,86 @@ setInterval(updateCountdown, 1000);
         `rana_hi/HI${String(i + 1).padStart(8, "0")}.png`
     );
 
-    // Precarica tutti i frame
-    [...walkFrames, ...hiFrames].forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
+    frog.style.width = `${DISPLAY_WIDTH}px`;
+    frog.style.height = "auto";
+    frog.style.objectFit = "contain";
+    frog.style.imageRendering = "auto";
+    frog.style.willChange = "left, opacity";
+
+    // Cache limitata: ridimensiona i frame prima di conservarli.
+    const cache = new Map();
+    const pending = new Map();
+
+    function loadSmallFrame(src) {
+        if (cache.has(src)) {
+            const item = cache.get(src);
+            cache.delete(src);
+            cache.set(src, item);
+            return Promise.resolve(item.url);
+        }
+
+        if (pending.has(src)) return pending.get(src);
+
+        const promise = new Promise((resolve, reject) => {
+            const original = new Image();
+            original.decoding = "async";
+
+            original.onload = async () => {
+                try {
+                    if (original.decode) await original.decode();
+
+                    const canvas = document.createElement("canvas");
+                    canvas.width = Math.max(1, Math.round(original.naturalWidth * SCALE));
+                    canvas.height = Math.max(1, Math.round(original.naturalHeight * SCALE));
+
+                    const ctx = canvas.getContext("2d", { alpha: true });
+                    ctx.drawImage(original, 0, 0, canvas.width, canvas.height);
+
+                    canvas.toBlob(blob => {
+                        if (!blob) {
+                            reject(new Error("Ridimensionamento immagine fallito"));
+                            return;
+                        }
+
+                        const url = URL.createObjectURL(blob);
+                        cache.set(src, { url, blob });
+
+                        while (cache.size > CACHE_LIMIT) {
+                            const oldestKey = cache.keys().next().value;
+                            const oldest = cache.get(oldestKey);
+                            URL.revokeObjectURL(oldest.url);
+                            cache.delete(oldestKey);
+                        }
+
+                        resolve(url);
+                    }, "image/webp", 0.78);
+                } catch (error) {
+                    reject(error);
+                }
+            };
+
+            original.onerror = () => reject(new Error(`Immagine non trovata: ${src}`));
+            original.src = src;
+        }).finally(() => pending.delete(src));
+
+        pending.set(src, promise);
+        return promise;
+    }
 
     let started = false;
-    let animationFrame;
-    let restartTimeout;
+    let raf = 0;
+    let restartTimeout = 0;
+    let requestId = 0;
+
+    async function showFrame(frames, index) {
+        const id = ++requestId;
+        try {
+            const url = await loadSmallFrame(frames[index]);
+            if (id === requestId) frog.src = url;
+        } catch (error) {
+            console.warn(error.message);
+        }
+    }
 
     function startFrog() {
         if (started) return;
@@ -780,7 +855,7 @@ setInterval(updateCountdown, 1000);
 
         frog.style.display = "block";
         frog.style.opacity = "1";
-        frog.style.transition = `opacity ${TRANSITION_MS}ms ease`;
+        frog.style.transition = "opacity 140ms ease";
 
         let x = window.innerWidth;
         let lastTime = performance.now();
@@ -788,70 +863,56 @@ setInterval(updateCountdown, 1000);
         let frameIndex = 0;
         let mode = "walk";
         let greeted = false;
-        let transition = null;
+        let lastShown = -1;
 
         frog.style.left = `${x}px`;
-        frog.src = walkFrames[0];
+        showFrame(walkFrames, 0);
 
-        function switchAnimation(nextMode, now) {
+        function changeMode(nextMode, now) {
             mode = nextMode;
             frameIndex = 0;
             elapsed = 0;
+            lastShown = -1;
             lastTime = now;
 
-            // Dissolvenza breve durante il cambio di animazione
             frog.style.opacity = "0";
-
-            transition = {
-                start: now,
-                mode: nextMode
-            };
-
-            frog.src = nextMode === "hi" ? hiFrames[0] : walkFrames[0];
+            showFrame(nextMode === "hi" ? hiFrames : walkFrames, 0);
+            requestAnimationFrame(() => {
+                frog.style.opacity = "1";
+            });
         }
 
         function animate(now) {
             const delta = Math.min(now - lastTime, 100);
             lastTime = now;
 
-            if (transition) {
-                const progress = Math.min(
-                    (now - transition.start) / TRANSITION_MS,
-                    1
-                );
-
-                frog.style.opacity = String(progress);
-
-                if (progress >= 1) {
-                    transition = null;
-                }
-            }
-
             if (mode === "walk") {
                 x -= SPEED * delta / 1000;
                 frog.style.left = `${x}px`;
 
-                // Fermati al centro per fare il saluto
+                // Saluto una volta al centro dello schermo.
                 const center = x + frog.offsetWidth / 2;
-
                 if (!greeted && center <= window.innerWidth / 2) {
                     greeted = true;
-                    switchAnimation("hi", now);
-                    animationFrame = requestAnimationFrame(animate);
+                    changeMode("hi", now);
+                    raf = requestAnimationFrame(animate);
                     return;
                 }
 
                 elapsed += delta;
-
                 while (elapsed >= FRAME_MS) {
                     elapsed -= FRAME_MS;
-                    frameIndex = (frameIndex + 1) % WALK_COUNT;
-                    frog.src = walkFrames[frameIndex];
+                    frameIndex = (frameIndex + 2) % WALK_COUNT;
                 }
 
-                // Uscita a sinistra: attesa di 2 secondi e ripartenza
+                if (frameIndex !== lastShown) {
+                    lastShown = frameIndex;
+                    showFrame(walkFrames, frameIndex);
+                }
+
+                // Uscita a sinistra, pausa 2 secondi, ritorno a destra.
                 if (x < -frog.offsetWidth) {
-                    cancelAnimationFrame(animationFrame);
+                    cancelAnimationFrame(raf);
 
                     restartTimeout = setTimeout(() => {
                         x = window.innerWidth;
@@ -860,40 +921,38 @@ setInterval(updateCountdown, 1000);
                         elapsed = 0;
                         greeted = false;
                         mode = "walk";
-                        transition = null;
-                        frog.style.opacity = "1";
-                        frog.src = walkFrames[0];
+                        lastShown = -1;
                         lastTime = performance.now();
-
-                        animationFrame = requestAnimationFrame(animate);
+                        frog.style.opacity = "1";
+                        showFrame(walkFrames, 0);
+                        raf = requestAnimationFrame(animate);
                     }, 2000);
-
                     return;
                 }
-            } else if (mode === "hi") {
-                // Riproduci il saluto una volta sola a 24 FPS
+            } else {
                 elapsed += delta;
-
                 while (elapsed >= FRAME_MS) {
                     elapsed -= FRAME_MS;
-                    frameIndex++;
+                    frameIndex += 2;
 
                     if (frameIndex >= HI_COUNT) {
-                        switchAnimation("walk", now);
+                        changeMode("walk", now);
                         break;
                     }
+                }
 
-                    frog.src = hiFrames[frameIndex];
+                if (mode === "hi" && frameIndex !== lastShown) {
+                    lastShown = frameIndex;
+                    showFrame(hiFrames, frameIndex);
                 }
             }
 
-            animationFrame = requestAnimationFrame(animate);
+            raf = requestAnimationFrame(animate);
         }
 
-        animationFrame = requestAnimationFrame(animate);
+        raf = requestAnimationFrame(animate);
     }
 
-    // Prima comparsa dopo 2 secondi
     setTimeout(startFrog, 2000);
 })();
 </script>
