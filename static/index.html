@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
 <title>23 PRODUCTIONS — 48H</title>
-
 <style>
 :root {
     --bg: #ffffff;
@@ -28,874 +27,1877 @@ body {
     color: var(--black);
     font-family: Arial, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
+
 }
+
+
 
 .page {
+
     width: 100%;
+
     min-height: 100vh;
+
     min-height: 100dvh;
+
     padding: 28px 5vw 22px;
+
     display: flex;
+
     flex-direction: column;
+
     justify-content: space-between;
+
     align-items: center;
+
     gap: 15px;
+
 }
+
+
 
 /* HEADER */
+
 header {
+
     width: 100%;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
 }
+
+
 
 .brand {
+
     display: flex;
+
     align-items: center;
+
     gap: 13px;
+
 }
+
+
 
 .logo {
+
     width: 54px;
+
     height: 54px;
+
     object-fit: contain;
+
     display: block;
+
     fill: #000000;
+
     stroke: #000000;
+
 }
+
+
 
 .brand-text {
+
     font-size: 13px;
+
     font-weight: 800;
+
     letter-spacing: 3px;
+
 }
+
+
 
 .brand-sub {
+
     font-size: 9px;
+
     color: var(--gray);
+
     letter-spacing: 2px;
+
     margin-top: 5px;
+
 }
+
+
 
 .clock-wrap {
+
     text-align: right;
+
 }
+
+
 
 .clock {
+
     font-size: clamp(22px, 3vw, 34px);
+
     font-weight: 500;
+
     letter-spacing: -1.5px;
+
     font-variant-numeric: tabular-nums;
+
 }
+
+
 
 .clock-label {
+
     margin-top: 4px;
+
     color: var(--gray);
+
     font-size: 9px;
+
     letter-spacing: 2px;
+
     text-transform: uppercase;
+
 }
+
+
 
 /* MAIN */
+
 main {
+
     width: 100%;
+
     max-width: 1100px;
+
     margin: auto;
+
     text-align: center;
+
     padding: 20px 0;
+
 }
+
+
 
 .kicker {
+
     font-size: 10px;
+
     font-weight: 700;
+
     letter-spacing: 5px;
+
     margin-bottom: 20px;
+
 }
+
+
 
 h1 {
+
     font-size: clamp(36px, 6vw, 78px);
+
     line-height: .95;
+
     font-weight: 900;
+
     letter-spacing: -4px;
+
     text-transform: uppercase;
+
 }
+
+
 
 h1 span {
+
     display: block;
+
 }
+
+
 
 .subtitle {
+
     color: var(--gray);
+
     font-size: 13px;
+
     letter-spacing: 1px;
+
     margin-top: 20px;
+
 }
+
+
 
 .deadline {
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 12px;
+
     border: 1px solid var(--line);
+
     padding: 11px 17px;
+
     margin-top: 24px;
+
     font-size: 11px;
+
     letter-spacing: 2px;
+
     font-weight: 700;
+
 }
+
+
 
 .delivery-dot {
+
     display: inline-block;
+
     width: 7px;
+
     height: 7px;
+
     border-radius: 50%;
+
     background: #ff3030;
+
     margin-right: 8px;
+
     vertical-align: middle;
+
     animation: redPulse 1.4s ease-in-out infinite;
+
 }
+
+
 
 @keyframes redPulse {
+
     0%, 100% {
+
         opacity: 1;
+
         box-shadow: 0 0 4px rgba(255, 48, 48, 0.5),
+
                     0 0 9px rgba(255, 48, 48, 0.25);
+
     }
+
     50% {
+
         opacity: 0.35;
+
         box-shadow: 0 0 8px rgba(255, 48, 48, 0.9),
+
                     0 0 16px rgba(255, 48, 48, 0.55);
+
     }
+
 }
+
+
 
 /* COUNTDOWN */
+
 .countdown {
+
     display: grid;
+
     grid-template-columns: repeat(3, minmax(0, 1fr));
+
     max-width: 900px;
+
     margin: 42px auto 0;
+
     border-top: 1px solid var(--black);
+
     border-bottom: 1px solid var(--black);
+
 }
+
+
 
 .unit {
+
     padding: 25px 8px 23px;
+
     min-width: 0;
+
 }
+
+
 
 .unit + .unit {
+
     border-left: 1px solid var(--line);
+
 }
+
+
 
 .number {
+
     display: block;
+
     font-size: clamp(40px, 7vw, 88px);
+
     line-height: 1;
+
     font-weight: 600;
+
     letter-spacing: -5px;
+
     font-variant-numeric: tabular-nums;
+
 }
+
+
 
 .label {
+
     display: block;
+
     margin-top: 15px;
+
     font-size: 9px;
+
     color: var(--gray);
+
     font-weight: 700;
+
     letter-spacing: 3px;
+
     text-transform: uppercase;
+
 }
+
+
 
 /* SCORELINE */
+
 .scoreline {
+
     width: 100%;
+
     max-width: 900px;
+
     margin: 22px auto 0;
+
 }
+
+
 
 .scoreline-info {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     gap: 12px;
+
     margin-bottom: 9px;
+
     font-size: 10px;
+
     font-weight: 800;
+
     letter-spacing: 2px;
+
 }
+
+
 
 #scorePercent {
+
     font-size: 13px;
+
     letter-spacing: 1px;
+
     font-variant-numeric: tabular-nums;
+
 }
+
+
 
 .scoreline-track {
+
     width: 100%;
+
     height: 12px;
+
     background: #ffffff;
+
     border: 1px solid #080808;
+
     overflow: hidden;
+
     position: relative;
+
 }
+
+
 
 .scoreline-fill {
+
     position: relative;
+
     width: 0%;
+
     height: 100%;
+
     background: #080808;
+
     overflow: hidden;
+
     transition: width 0.8s linear;
+
 }
+
+
 
 .scoreline-stripes {
+
     position: absolute;
+
     inset: 0;
+
     width: 100%;
+
     height: 100%;
+
     background: repeating-linear-gradient(
+
         -45deg,
+
         #080808 0px,
+
         #080808 5px,
+
         #ffffff 5px,
+
         #ffffff 10px
+
     );
+
 }
+
+
 
 /* FOOTER */
+
 footer {
+
     width: 100%;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     gap: 15px;
+
     border-top: 1px solid var(--line);
+
     padding-top: 15px;
+
 }
+
+
 
 .footer-text {
+
     font-size: 9px;
+
     letter-spacing: 2px;
+
     color: var(--gray);
+
 }
+
+
 
 .fullscreen {
+
     display: flex;
+
     align-items: center;
+
     gap: 9px;
+
     border: 1px solid var(--black);
+
     background: var(--white);
+
     color: var(--black);
+
     padding: 12px 17px;
+
     font-size: 10px;
+
     font-weight: 700;
+
     letter-spacing: 1.5px;
+
     text-transform: uppercase;
+
     cursor: pointer;
-    transition: background .2s, color .2s;
+
+    transition: *background* .2s, color .2s;
+
 }
+
+
 
 .fullscreen:hover {
+
     background: white;
+
     color: black;
+
 }
+
+
 
 .fullscreen svg {
+
     width: 15px;
+
     height: 15px;
+
 }
+
+
 
 /* SCHERMI 16:9 */
+
 @media (min-aspect-ratio: 16/9) and (min-width: 800px) {
+
     .page {
+
         max-height: 100vh;
+
         overflow: hidden;
+
     }
+
 }
+
+
 
 /* SCHERMI BASSI */
+
 @media (max-height: 750px) and (min-width: 601px) {
+
     .page {
+
         padding-top: 16px;
+
         padding-bottom: 14px;
+
         gap: 8px;
+
     }
 
+
+
     .logo {
+
         width: 42px;
+
         height: 42px;
+
     }
+
+
 
     main {
+
         padding: 10px 0;
+
     }
+
+
 
     .kicker {
+
         margin-bottom: 12px;
+
     }
+
+
 
     h1 {
+
         font-size: clamp(38px, 5.2vw, 62px);
+
     }
+
+
 
     .subtitle {
+
         margin-top: 12px;
+
     }
+
+
 
     .deadline {
+
         margin-top: 16px;
+
         padding: 8px 13px;
+
     }
+
+
 
     .countdown {
+
         margin-top: 25px;
+
     }
+
+
 
     .unit {
+
         padding: 18px 6px;
+
     }
+
+
 
     .number {
+
         font-size: clamp(38px, 5.8vw, 65px);
+
     }
+
+
 
     .label {
+
         margin-top: 9px;
+
     }
+
+
 
     .scoreline {
+
         margin-top: 15px;
+
     }
+
+
 
     .scoreline-track {
+
         height: 9px;
+
     }
 
+
+
     footer {
+
         padding-top: 10px;
+
     }
+
 }
+
+
 
 /* MOBILE */
+
 @media (max-width: 600px) {
+
     .page {
+
         padding: 20px 17px;
+
         gap: 15px;
+
     }
 
+
+
     .logo {
+
         width: 38px;
+
         height: 38px;
+
     }
+
+
 
     .brand {
+
         gap: 9px;
+
     }
+
+
 
     .brand-text {
+
         font-size: 10px;
+
         letter-spacing: 2px;
+
     }
 
+
+
     .brand-sub {
+
         font-size: 7px;
+
         letter-spacing: 1px;
+
     }
+
+
 
     .clock {
+
         font-size: 22px;
+
     }
+
+
 
     .clock-label {
+
         font-size: 8px;
+
     }
+
+
 
     h1 {
+
         font-size: clamp(35px, 10vw, 55px);
+
         letter-spacing: -2px;
+
     }
+
+
 
     .kicker {
+
         letter-spacing: 3px;
+
     }
+
+
 
     .subtitle {
+
         font-size: 12px;
+
     }
+
+
 
     .deadline {
+
         font-size: 9px;
+
         letter-spacing: 1px;
+
         gap: 8px;
+
         padding: 10px;
+
     }
+
+
 
     .countdown {
+
         margin-top: 30px;
+
     }
+
+
 
     .unit {
+
         padding: 20px 2px;
+
     }
+
+
 
     .number {
+
         font-size: clamp(28px, 8vw, 44px);
+
         letter-spacing: -2px;
+
     }
+
+
 
     .label {
+
         font-size: 8px;
+
         letter-spacing: .5px;
+
     }
+
+
 
     .scoreline {
+
         margin-top: 18px;
+
     }
 
+
+
     .scoreline-info {
+
         font-size: 8px;
+
         letter-spacing: 1px;
+
     }
+
+
 
     #scorePercent {
+
         font-size: 11px;
+
     }
 
+
+
     .scoreline-track {
+
         height: 9px;
+
     }
+
+
 
     .footer-text {
+
         font-size: 8px;
+
         letter-spacing: 1px;
+
     }
+
+
 
     .fullscreen {
+
         padding: 11px;
+
         font-size: 9px;
+
         letter-spacing: .5px;
+
     }
+
+
 
     #rana-walk {
+
         width: 72px;
+
     }
+
 }
+
+
 
 /* DISPLAY MOLTO BASSI */
+
 @media (max-height: 500px) and (min-width: 601px) {
+
     .page {
+
         padding-top: 8px;
+
         padding-bottom: 8px;
+
     }
+
+
 
     .logo {
+
         width: 32px;
+
         height: 32px;
+
     }
+
+
 
     .brand-sub {
+
         display: none;
+
     }
+
+
 
     .kicker {
+
         margin-bottom: 7px;
+
     }
+
+
 
     h1 {
+
         font-size: 38px;
+
     }
+
+
 
     .subtitle {
+
         margin-top: 7px;
+
     }
+
+
 
     .deadline {
+
         margin-top: 9px;
+
     }
+
+
 
     .countdown {
+
         margin-top: 15px;
+
     }
+
+
 
     .unit {
+
         padding: 12px;
+
     }
+
+
 
     .number {
+
         font-size: 38px;
+
     }
+
+
 
     .label {
+
         margin-top: 7px;
+
     }
+
+
 
     .scoreline {
+
         margin-top: 10px;
+
     }
+
+
 
     .scoreline-info {
+
         margin-bottom: 5px;
+
     }
+
+
 
     .scoreline-track {
+
         height: 7px;
+
     }
+
+
 
     footer {
+
         padding-top: 7px;
+
     }
+
 }
 
+
+
 /* RANA WEBP */
+
   #rana-walk {
+
     position: fixed;
+
     bottom: 18px;
+
     left: 0;
+
     width: 90px;
+
     height: auto;
+
     z-index: 9999;
+
     pointer-events: none;
+
     display: none;
+
   }
+
+
+
+/* FINALE ALLA SCADENZA */
+#deadline-show {
+  position: fixed; inset: 0; z-index: 20000; display: none;
+  align-items: center; justify-content: center; flex-direction: column;
+  overflow: hidden; background: #000;
+  color: #fff; text-align: center; padding: 24px;
+}
+#deadline-show.active { display: flex; animation: finaleFade .8s ease both; }
+#fireworks { position: absolute; inset: 0; width: 100%; height: 100%; }
+#finale-copy { position: relative; z-index: 1; opacity: 0; transform: translateY(18px) scale(.96); animation: finaleText 1s .6s ease forwards; }
+#finale-kicker { font-size: 10px; letter-spacing: 6px; margin-bottom: 20px; color: #d6d6d6; text-shadow: none; }
+#finale-title { font-size: clamp(48px, 11vw, 120px); line-height: .9; font-weight: 900; letter-spacing: -.06em; text-transform: uppercase; color: #fff; text-shadow: none; filter: none; }
+#finale-sub { margin-top: 24px; font-size: clamp(10px, 2vw, 14px); letter-spacing: 3px; color: #e5e5e5; text-shadow: none; }
+@keyframes finaleFade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes finaleText { to { opacity: 1; transform: translateY(0) scale(1) } }
+
 </style>
+
 </head>
 
+
+
 <body>
+
 <div class="page">
+
     <header>
+
         <div class="brand">
+
             <img class="logo" src="static/logo.svg" alt="23 Productions">
+
             <div>
+
                 <div class="brand-text">23 PRODUCTIONS</div>
+
                 <div class="brand-sub">INDEPENDENT FILMMAKING</div>
+
             </div>
+
         </div>
+
+
 
         <div class="clock-wrap">
+
             <div class="clock" id="clock">00:00:00</div>
+
             <div class="clock-label">Ora italiana</div>
+
         </div>
+
     </header>
 
+
+
     <main>
+
         <div class="kicker">48 HOUR FILM PROJECT</div>
 
+
+
         <h1>
+
             <span>48 ore.</span>
+
             <span>Una storia.</span>
+
         </h1>
 
+
+
         <p class="subtitle">
+
             Il tempo per creare qualcosa di indimenticabile.
+
         </p>
 
+
+
         <div class="deadline">
+
             <span class="delivery-dot"></span>
+
             CONSEGNA — 29 NOVEMBRE 2026 — 19:00
+
         </div>
+
+
 
         <section class="countdown">
+
             <div class="unit">
+
                 <span class="number" id="hours">00</span>
+
                 <span class="label">Ore</span>
+
             </div>
 
+
+
             <div class="unit">
+
                 <span class="number" id="minutes">00</span>
+
                 <span class="label">Minuti</span>
+
             </div>
 
+
+
             <div class="unit">
+
                 <span class="number" id="seconds">00</span>
+
                 <span class="label">Secondi</span>
+
             </div>
+
         </section>
+
+
 
         <section class="scoreline">
+
             <div class="scoreline-info">
+
                 <span>PRODUCTION PROGRESS</span>
+
                 <span id="scorePercent">00.0%</span>
+
             </div>
+
+
 
             <div class="scoreline-track">
+
                 <div class="scoreline-fill" id="scoreFill">
+
                     <div class="scoreline-stripes"></div>
+
                 </div>
+
             </div>
+
         </section>
+
     </main>
 
+
+
     <footer>
+
         <div class="footer-text" id="footerText">
+
             WRITE. SHOOT. EDIT. SUBMIT.
+
         </div>
 
+
+
         <button class="fullscreen" id="fullscreenBtn" type="button">
+
             <svg viewBox="0 0 24 24" fill="none"
+
                  stroke="currentColor" stroke-width="1.8"
+
                  stroke-linecap="round" stroke-linejoin="round">
+
                 <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+
                 <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+
                 <path d="M21 16v3a2 2 0 0 1-2 2h-3"/>
+
                 <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+
             </svg>
+
             <span id="fullscreenLabel">FULLSCREEN</span>
+
         </button>
+
     </footer>
+
+</div>
+
+
+
+
+<div id="deadline-show" aria-hidden="true">
+  <canvas id="fireworks"></canvas>
+  <div id="finale-copy">
+    <div id="finale-kicker">23 PRODUCTIONS · 48 HOUR FILM PROJECT</div>
+    <div id="finale-title">TIME'S UP.</div>
+    <div id="finale-sub">48 ORE. UNA STORIA. FATTA.</div>
+  </div>
 </div>
 
 <img id="rana-walk" src="static/rana_walk.webp" alt="" aria-hidden="true">
 
+
+
 <script>
 
+
+
 const deadline = new Date("2026-11-29T19:00:00+01:00");
+
 const scorelineStart = new Date("2026-11-27T19:00:00+01:00");
 
+
+
 const $ = id => document.getElementById(id);
+
 const pad = n => String(n).padStart(2, "0");
 
-/* OROLOGIO ITALIANO */
-function updateClock() {
-    $("clock").textContent = new Intl.DateTimeFormat("it-IT", {
-        timeZone: "Europe/Rome",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hourCycle: "h23"
-    }).format(new Date());
+
+
+
+
+/* FINALE: FUOCHI D'ARTIFICIO ALLO ZERO */
+let finaleStarted = false;
+function launchDeadlineShow() {
+  if (finaleStarted) return;
+  finaleStarted = true;
+  const overlay = document.getElementById('deadline-show');
+  const canvas = document.getElementById('fireworks');
+  const ctx = canvas.getContext('2d');
+  overlay.classList.add('active');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  let w = 0, h = 0;
+  const particles = [];
+  const colors = ['#FFE8A3', '#FFB3B8', '#A9D8FF', '#B8E8C5', '#FFD1A8', '#F6B7D2', '#C9B8FF', '#A8EDE2', '#D7F29A', '#FFC4A3', '#B9C7FF', '#F4D6FF']; // Palette pastello varia: un solo colore per ogni razzo
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.35);
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = Math.floor(w * dpr); canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const rockets = [];
+  function launchRocket() {
+    const x = w * (.12 + Math.random() * .76);
+    const targetY = h * (.16 + Math.random() * .38);
+    rockets.push({ x, y: h + 8, vx: (Math.random() - .5) * 1.1,
+      vy: -(7.2 + Math.random() * 2.2), targetY,
+      color: colors[Math.floor(Math.random() * colors.length)], trail: [] });
+  }
+  function burst(x, y, color) {
+    const count = 34 + Math.floor(Math.random() * 23);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.PI * 2 * i / count + Math.random() * .08;
+      const speed = 1.1 + Math.random() * 4.4;
+      if (particles.length >= 650) particles.splice(0, particles.length - 649);
+      particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        life: 46 + Math.random() * 24, max: 70, color, size: 1.1 + Math.random() * 1.4 });
+    }
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  let frame = 0;
+  let nextLaunch = 18;
+  function animate() {
+    frame++;
+    // Pulisce ogni frame: niente scie residue o persistenza dopo le esplosioni.
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Frequenza più alta: un razzo ogni 0,6–0,9 secondi circa.
+    if (frame >= nextLaunch) {
+      launchRocket();
+      nextLaunch = frame + 34 + Math.random() * 20;
+    }
+
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      r.trail.push({ x: r.x, y: r.y });
+      if (r.trail.length > 6) r.trail.shift();
+      r.x += r.vx; r.y += r.vy; r.vy += .045;
+      // Scia luminosa: alone morbido colorato + nucleo brillante.
+      ctx.shadowColor = r.color;
+      ctx.shadowBlur = 22;
+      for (let j = 0; j < r.trail.length; j++) {
+        const t = r.trail[j];
+        const strength = (j + 1) / r.trail.length;
+        ctx.globalAlpha = strength * .72;
+        ctx.fillStyle = r.color;
+        ctx.beginPath(); ctx.arc(t.x, t.y, 1.2 + 1.7 * strength, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#fff';
+      ctx.shadowBlur = 28; ctx.shadowColor = r.color;
+      ctx.beginPath(); ctx.arc(r.x, r.y, 2.8, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
+      if (r.y <= r.targetY || r.vy >= 0) {
+        burst(r.x, r.y, r.color);
+        rockets.splice(i, 1);
+      }
+    }
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += .035; p.vx *= .992; p.vy *= .992; p.life--;
+      // Scintille con alone neon e centro caldo, per un'esplosione più glowing.
+      ctx.globalAlpha = Math.max(0, p.life / p.max);
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 16;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size * 1.35, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha *= .9;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(.55, p.size * .42), 0, Math.PI * 2); ctx.fill();
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    ctx.globalCompositeOperation = 'source-over';
+    requestAnimationFrame(animate);
+  }
+  animate();
 }
 
+
+/* OROLOGIO ITALIANO */
+
+function updateClock() {
+
+    $("clock").textContent = new Intl.DateTimeFormat("it-IT", {
+
+        timeZone: "Europe/Rome",
+
+        hour: "2-digit",
+
+        minute: "2-digit",
+
+        second: "2-digit",
+
+        hourCycle: "h23"
+
+    }).format(new Date());
+
+}
+
+
+
 /* SCORELINE */
+
 function updateScoreline() {
+
     const now = Date.now();
+
     const start = scorelineStart.getTime();
+
     const end = deadline.getTime();
+
     const total = end - start;
+
     const elapsed = now - start;
+
+
 
     let percentage = 0;
 
+
+
     if (total > 0) {
+
         percentage = Math.max(0, Math.min(100, elapsed / total * 100));
+
     }
 
+
+
     $("scoreFill").style.width = percentage + "%";
+
     $("scorePercent").textContent = percentage.toFixed(1) + "%";
+
 }
 
+
+
 /* COUNTDOWN */
+
 function updateCountdown() {
+
     const now = Date.now();
+
     const remaining = Math.max(0, deadline.getTime() - now);
 
+
+
     const hours = Math.floor(remaining / 3600000);
+
     const minutes = Math.floor((remaining % 3600000) / 60000);
+
     const seconds = Math.floor((remaining % 60000) / 1000);
 
+
+
     $("hours").textContent = String(hours).padStart(2, "0");
+
     $("minutes").textContent = pad(minutes);
+
     $("seconds").textContent = pad(seconds);
+
+
 
     updateScoreline();
 
+
+
     if (now >= deadline.getTime()) {
+
         $("footerText").textContent = "DEADLINE REACHED.";
+        launchDeadlineShow();
+
     }
+
 }
 
+
+
 /* FULLSCREEN */
+
 async function toggleFullscreen() {
+
     try {
+
         if (!document.fullscreenElement) {
+
             await document.documentElement.requestFullscreen();
+
         } else {
+
             await document.exitFullscreen();
+
         }
+
     } catch {
+
         $("footerText").textContent =
+
             "FULLSCREEN NON DISPONIBILE IN QUESTO BROWSER.";
+
     }
+
 }
+
+
 
 $("fullscreenBtn").addEventListener("click", toggleFullscreen);
 
+
+
 document.addEventListener("fullscreenchange", () => {
+
     $("fullscreenLabel").textContent =
+
         document.fullscreenElement ? "ESCI" : "FULLSCREEN";
+
 });
 
+
+
 /* AVVIO */
+
 updateClock();
+
 updateCountdown();
 
+
+
 setInterval(updateClock, 1000);
+
 setInterval(updateCountdown, 1000);
-  
+
 /* RANA WEBP: CAMMINA, SALUTA AL CENTRO E RIPARTE */
+
  (() => {
+
       const frog = document.getElementById("rana-walk");
 
+
+
       const WALK_SRC = "/static/rana_walk.webp";
+
       const HI_SRC = "/static/rana_hi.webp";
 
+
+
       const SPEED = 140;              // pixel al secondo
+
       const GREETING_DURATION = 2500; // durata del saluto
+
       const EXIT_PAUSE = 1200;        // pausa prima del rientro
+
       const START_DELAY = 1200;
 
+
+
       let x = 0;
+
       let lastTime = 0;
+
       let state = "waiting";
+
       let frame = null;
+
       let timer = null;
+
       let cycle = 0;
 
+
+
       const walkPreload = new Image();
+
       walkPreload.src = WALK_SRC;
 
+
+
       const hiPreload = new Image();
+
       hiPreload.src = HI_SRC;
 
+
+
       function cancelMotion() {
+
         if (frame !== null) {
+
           cancelAnimationFrame(frame);
+
           frame = null;
+
         }
+
       }
+
+
 
       function clearTimer() {
+
         if (timer !== null) {
+
           clearTimeout(timer);
+
           timer = null;
+
         }
+
       }
+
+
 
       function scheduleEntry(delay) {
+
         clearTimer();
+
         state = "waiting";
 
+
+
         timer = setTimeout(() => {
+
           timer = null;
+
           startEntry();
+
         }, delay);
+
       }
+
+
 
       function startEntry() {
+
         cancelMotion();
+
         clearTimer();
+
+
 
         cycle++;
+
         state = "walking-in";
+
         x = window.innerWidth;
+
         lastTime = 0;
+
+
 
         frog.src = WALK_SRC;
+
         frog.style.display = "block";
+
         frog.style.left = `${x}px`;
 
+
+
         frame = requestAnimationFrame(tick);
+
       }
+
+
 
       function tick(timestamp) {
+
         frame = null;
 
+
+
         if (state !== "walking-in" && state !== "walking-out") {
+
           return;
+
         }
+
+
 
         if (lastTime === 0) {
+
           lastTime = timestamp;
+
         }
+
+
 
         const delta = Math.min((timestamp - lastTime) / 1000, 0.05);
+
         lastTime = timestamp;
 
+
+
         // In entrata e in uscita la rana cammina sempre verso sinistra.
+
         x -= SPEED * delta;
+
         frog.style.left = `${x}px`;
 
+
+
         if (state === "walking-in") {
+
           const centerX = (window.innerWidth - frog.offsetWidth) / 2;
 
+
+
           if (x <= centerX) {
+
             x = centerX;
+
             frog.style.left = `${x}px`;
+
             startGreeting();
+
             return;
+
           }
+
         }
+
+
 
         // Importante: dopo il saluto continua da dove si era fermata,
+
         // senza riportare x fuori dallo schermo prima del movimento.
+
         if (state === "walking-out" && x + frog.offsetWidth <= 0) {
+
           frog.style.display = "none";
+
           scheduleEntry(EXIT_PAUSE);
+
           return;
+
         }
 
+
+
         frame = requestAnimationFrame(tick);
+
       }
 
+
+
       function startGreeting() {
+
         cancelMotion();
+
         clearTimer();
 
+
+
         state = "greeting";
+
         lastTime = 0;
+
+
 
         frog.src = HI_SRC;
 
+
+
         timer = setTimeout(() => {
+
           timer = null;
 
+
+
           // Riprende dal centro e cammina fino al bordo sinistro.
+
           state = "walking-out";
+
           frog.src = WALK_SRC;
+
           lastTime = 0;
 
+
+
           frame = requestAnimationFrame(tick);
+
         }, GREETING_DURATION);
+
       }
 
+
+
       // Se la finestra viene ridimensionata durante il saluto,
+
       // la rana resta centrata.
+
       window.addEventListener("resize", () => {
+
         if (state === "greeting") {
+
           x = (window.innerWidth - frog.offsetWidth) / 2;
+
           frog.style.left = `${x}px`;
+
         }
+
       });
 
+
+
       // Sospende l'animazione quando la scheda è nascosta e la
+
       // riavvia senza lasciare timer o frame bloccati.
+
       document.addEventListener("visibilitychange", () => {
+
         if (document.hidden) {
+
           cancelMotion();
+
           clearTimer();
+
           return;
+
         }
+
+
 
         lastTime = 0;
 
+
+
         if (state === "walking-in" || state === "walking-out") {
+
           frame = requestAnimationFrame(tick);
+
         } else if (state === "greeting") {
+
           startGreeting();
+
         } else {
+
           scheduleEntry(START_DELAY);
+
         }
       });
 
       walkPreload.onerror = () => {
+
         console.error("Impossibile caricare la rana che cammina:", WALK_SRC);
+
       };
+
+
 
       hiPreload.onerror = () => {
+
         console.error("Impossibile caricare la rana che saluta:", HI_SRC);
+
       };
 
+
+
       scheduleEntry(START_DELAY);
+
     })();
+
 </script>
+
 </body>
+
 </html>
